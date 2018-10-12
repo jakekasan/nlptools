@@ -25,14 +25,14 @@ def get_lemms(target=None):
     lemmer = WordNetLemmatizer()
 
     return list(map(lambda x: lemmer.lemmatize(x),target))
-    
+
 
 def remove_stopwords(target=None,stop_words=None):
     """
         removes a given set of stopwords
     """
     if stop_words is None:
-        stop_words = set(nltk_stopwords.stopwords('english'))
+        stop_words = set(nltk_stopwords.words('english'))
 
     return [x for x in target if x not in stop_words]
 
