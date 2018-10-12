@@ -2,6 +2,7 @@ import re
 import nltk
 
 from nltk.corpus import stopwords as nltk_stopwords
+from nltk.stem import WordNetLemmatizer
 
 def get_tokens(target=None):
     """
@@ -20,6 +21,11 @@ def get_lemms(target=None):
 
         returns an array of lemms
     """
+
+    lemmer = WordNetLemmatizer()
+
+    return list(map(lambda x: lemmer.lemmatize(x),target))
+    
 
 def remove_stopwords(target=None,stop_words=None):
     """
