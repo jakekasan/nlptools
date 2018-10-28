@@ -6,9 +6,10 @@ from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords as nltk_stopwords
 from nltk.stem import WordNetLemmatizer
 
-def get_tokens(target=None):
+def get_tokens(target=None,pos=False):
     """
-        takes a string or array and returns an array of all words, lowercase 
+        takes a string or array and returns a list of all words, lowercase
+        if pos is True, then a list of tuples with the word and part of speech are returned
     """
     if target is None:
         return []
@@ -17,6 +18,9 @@ def get_tokens(target=None):
         target = reduce(lambda x,y: x+y,target)
     
     target = re.sub(r'[,.\/?!-=]'," ",target.lower()).split()
+
+    if pos:
+        target = nltk.pos_tag()
 
     return target
     
@@ -67,7 +71,7 @@ def apply_nlp_treatment(df=None,text_col=None,words=1000):
 
 def most_common_words(target=None):
     """
-        gets the most common words and builds the independant variables
+        gets the most common words and builds the independent variables
     """
 
     # get tokens
