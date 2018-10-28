@@ -8,9 +8,10 @@ class BagOfWords(Approach):
         self.rawData = data
         self.documents = None
         self.bags = None
-        self.bagPrototype = None
+        self.totalBag = None
         self.result = None
         self.limit = limit
+        self.prototype = None
         pass
 
     def build(self):
@@ -34,7 +35,19 @@ class BagOfWords(Approach):
 
         prototype = {a:b for a,b in prototype}
 
-        self.bagPrototype = prototype
+        self.totalBag = prototype
+        self.prototype = prototype.keys()
+
+    def variablesFromRaw(self,raw):
+        """
+            returns an array of variables for a given array
+        """
+        document = self.processRaw(raw)
+        bag = self.individualBags(document)
+
+        return [bag[x] if x in bag.keys() for x in self.prototype]
+
+    
         
     def individualBags(self,document):
         bag = {}
