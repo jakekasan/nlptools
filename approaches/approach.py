@@ -20,10 +20,17 @@ class Approach:
         if df is None:
             raise
 
-    def processRow(self):
+    def processRaw(self,raw):
         """
             once approach is built, this function can be used for getting inputs from raw text
         """
+
+        tokens = word_tokenize(raw)
+        pos = pos_tag(tokens)
+        lemms = self.lemmatizeDocument(pos)
+
+        return lemms
+
 
     def tokenize(self,data):
         """
