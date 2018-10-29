@@ -67,6 +67,16 @@ class BagOfWords(Approach):
                 bag[word] = 1
         return bag
 
+    def get_bag_from_document(self,document):
+        """
+            processes raw text and returns a bag
+        """
+
+        tokens = self.process_document(document,pos=True)
+        bag = self.individual_bags(tokens)
+
+        return bag
+
 
 sample_corpus = ["This is a sentence","This is another sentence","And here is a phrase"]
 corpus_bow = {
