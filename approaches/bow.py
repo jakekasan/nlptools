@@ -15,7 +15,12 @@ class BagOfWords(Approach):
         self.prototype = None
         pass
 
-    def build(self):
+    def build(self,corpus=None):
+        """
+            builds a Bag-Of-Words approach given some corpus
+            once it is built, the class can be used to transform further
+            raw text into a numerical form.
+        """
         documents = self.tokenize(self.rawData)
         self.documents = self.lemmatizeDocument(documents)
 
