@@ -4,8 +4,9 @@
 from approaches.approach import Approach
 
 class BagOfWords(Approach):
-    def __init__(self,data,limit=None):
-        self.rawData = data
+    def __init__(self,corpus=None,limit=None):
+        Approach.__init__(name="Bag Of Words",corpus=corpus)
+        self.rawData = corpus
         self.documents = None
         self.bags = None
         self.totalBag = None
@@ -47,8 +48,6 @@ class BagOfWords(Approach):
 
         return [bag[x] if x in bag.keys() for x in self.prototype]
 
-    
-        
     def individualBags(self,document):
         bag = {}
         for word in document:
@@ -57,7 +56,3 @@ class BagOfWords(Approach):
             else:
                 bag[word] = 1
         return bag
-
-    def (self):
-        for
-            
