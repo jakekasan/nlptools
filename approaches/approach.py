@@ -8,6 +8,8 @@ from nltk.corpus import stopwords as nltk_stopwords
 from nltk.stem import WordNetLemmatizer
 from nltk import pos_tag
 
+import unittest
+
 class Approach:
     def __init__(self,name=None,corpus=None):
         self.name = name or "Untitled"
@@ -61,4 +63,17 @@ class Approach:
         lemms = list(map(lambda x: self.lemmatizeDocument(x),corpus))
         return lemms
 
-    
+class TestApproach(unittest.TestCase):
+    def setUp(self):
+        self.app = Approach()
+
+    def test_init(self):
+        self.assertIsInstance(self.app,Approach)
+
+    def test_init()
+
+def main():
+    unittest.main()
+
+if __name__ == '__main__':
+    main()
