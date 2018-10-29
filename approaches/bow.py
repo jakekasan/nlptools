@@ -1,11 +1,12 @@
 """
     Bag Of Words
 """
-from approaches.approach import Approach
+from approach import Approach
+import unittest
 
 class BagOfWords(Approach):
     def __init__(self,corpus=None,limit=None):
-        Approach.__init__(name="Bag Of Words",corpus=corpus)
+        Approach.__init__(self,name="Bag Of Words",corpus=corpus)
         self.rawData = corpus
         self.documents = None
         self.bags = None
@@ -34,9 +35,9 @@ class BagOfWords(Approach):
                 else:
                     prototype[word] = 1
 
-        prototype = [x for x in sorted(prototype.items(),key=lambda (k,v): (v,k))]
+        prototype = [x for x in sorted(prototype.items(),key=lambda x: x[1])]
 
-        if self.limit not None:
+        if self.limit is not None:
             prototype = prototype[:self.limit]
 
         prototype = {a:b for a,b in prototype}
@@ -51,13 +52,45 @@ class BagOfWords(Approach):
         document = self.processRaw(raw)
         bag = self.individualBags(document)
 
-        return [bag[x] if x in bag.keys() for x in self.prototype]
+        return [bag[x] if x in bag.keys() else 0 for x in self.prototype]
 
-    def individualBags(self,document):
+    def individualBags(self,tokens):
+        """
+            takes a tokens of a document
+            returns a dictionary of bag of words
+        """
         bag = {}
-        for word in document:
+        for word in tokens:
             if word in bag.keys():
                 bag[word] += 1
             else:
                 bag[word] = 1
         return bag
+
+
+class BOWTest(unittest.TestCase):
+
+    def setUp(self):
+        self.bow = BagOfWords()
+
+    def test_class(self):
+        self.assertIsInstance(self.bow,BagOfWords)
+
+    def test_individualBags(self):
+        """
+            A comment!
+        """
+        string = ["Heavy", "hangs", "the", "head"]
+        desired = {"Heavy":1,"hangs":1,"the":1,"head":1}
+        actual = self.bow.individualBags(string)
+        self.assertEqual(desired,actual)
+
+    
+
+def main():
+    unittest.main()
+
+if __name__ == '__main__':
+    main()
+
+    
