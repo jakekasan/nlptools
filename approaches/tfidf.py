@@ -5,11 +5,17 @@
 """
 
 from approaches.bow import BagOfWords
+import math
 
 class TFIDF(BagOfWords):
     def __init__(self,data=None):
         BagOfWords.__init__(self,data=data)
         self.bags = None
+        self.prototype = None
+        self.documents = None
+        self.bags = None
+        self.totalBag = None
+        self.limit = None
         pass
 
     def build(self,corpus=None):
@@ -46,25 +52,44 @@ class TFIDF(BagOfWords):
             returns a list of td-idf values
         """
 
-    def get_tf_idf(self,word,bags):
+        # get bag
+        bag = self.get_bag_from_document(document)
+
+        return [self.get_tf_idf(x,bag) for x in self.prototype]
+    
+
+    def get_tf_idf(self,word,document_bag):
         """
             returns 
         """
+        return self.get_word_tf * self.get_word_idf
 
     def get_word_idf(self,word):
         """
             returns the inverse document frequency
 
             formula:
-                log()
+                log(number of document/ number of documents with term)
         """
-        pass
+        number_of_documents = len(self.bags)
+        number_of_documents_with_term = 0
+        for document in self.bags:
+            if word in document.keys():
+                number_of_documents_with_term += 1
 
-    def get_word_tf(self,word,document):
+        return math.log((number_of_documents/number_of_documents_with_term),2)
+
+    def get_word_tf(self,word,document_bag):
         """
             returns a term frequency (between 0 and 1)
         """
-        pass
+        all_words = sum(document_bag.values())
+        word_count = 0
+        if word in document_bag.keys():
+            word_count = document_bag[word]
+            
+        return word_count / all_words
+        
         
 
     
