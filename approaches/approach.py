@@ -22,39 +22,46 @@ class Approach:
         if df is None:
             raise
 
-    def processRaw(self,raw):
+    def process_document(self,document,pos=False):
         """
             once approach is built, this function can be used for getting inputs from raw text
         """
 
-        tokens = word_tokenize(raw)
-        pos = pos_tag(tokens)
-        lemms = self.lemmatizeDocument(pos)
+        tokens = self.tokenize_document(document,pos=pos)
+        lemms = self.lemmatize_document(tokens)
 
         return lemms
 
+    def tokenize_document(self,document,pos=False):
+        """
+            returns a list of tuples with POS
+        """
+        tokens = word_tokenize(document)
+        #tokens = list(map(lambda x: x.lower(),tokens))
+        tokens = [w.lower() for w in tokens]
+        tokens_pos = pos_tag(tokens)
+        if pos:
+            return tokens_pos
+        return tokens
 
-    def tokenize(self,data):
+
+    def tokenize_corpus(self,corpus,pos=False):
         """
             returns list of tuples with tokens + POS
         """
         
-        # tokens
-        documents = list(map(lambda x: word_tokenize(x),data))
+        return [self.tokenize_document(x,pos=pos) for x in corpus]
+        #list(map(lambda x: self.tokenize_document(x,pos=pos),corpus))
 
-        # pos
-        documents = list(map(lambda x: pos_tag(x),documents))
 
-        return documents
-
-    def lemmatizeDocument(self,tokens):
+    def lemmatize_document(self,document):
         """
             returns lemms for single document
         """
 
         lemmer = WordNetLemmatizer()
 
-        lemms = [lemmer(a,pos=b) for a,b in tokens]
+        lemms = [lemmer(a,pos=b) for a,b in document]
 
     def lemmatizeCorpus(self,corpus):
         """
@@ -70,7 +77,18 @@ class TestApproach(unittest.TestCase):
     def test_init(self):
         self.assertIsInstance(self.app,Approach)
 
-    def test_init()
+    def test_tokenize(self):
+        string = "Hello world"
+        expected = ["hello","world"]
+        actual = self.app.tokenize_document(string,pos=False)
+        self.assertEqual(expected,actual)
+
+    def test_pos(self):
+        string = "Hello world"
+        expected = [("hello","NN"),("world","NN")]
+        actual = self.app.tokenize_document(string,pos=True)
+        self.assertEqual(expected,actual)
+
 
 def main():
     unittest.main()
