@@ -1,13 +1,14 @@
 """
     Bag Of Words
 """
-from approach import Approach
+from approaches.approach import Approach
 import unittest
 
 class BagOfWords(Approach):
-    def __init__(self,corpus=None,limit=None):
-        Approach.__init__(self,name="Bag Of Words",corpus=corpus)
-        self.rawData = corpus
+    def __init__(self,name=None,limit=None):
+        self.name = name or "Bag of Words"
+        Approach.__init__(self,name=self.name)
+        #self.rawData = corpus
         self.documents = None
         self.bags = None
         self.totalBag = None
