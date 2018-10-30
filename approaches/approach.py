@@ -124,6 +124,9 @@ class Approach:
         ':':None # mid-sentence punc (: ; ... – -)
         }
 
+        if tag not in tag_map.keys():
+            return wn.NOUN
+            
         for key,value in tag_map.items():
             if value is None:
                 tag_map[key] = wn.NOUN
