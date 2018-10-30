@@ -8,8 +8,9 @@ from approaches.bow import BagOfWords
 import math
 
 class TFIDF(BagOfWords):
-    def __init__(self,data=None):
-        BagOfWords.__init__(self,data=data)
+    def __init__(self,name=None):
+        self.name = name or "Tf-Idf"
+        BagOfWords.__init__(self,name=self.name)
         self.bags = None
         self.prototype = None
         self.documents = None
