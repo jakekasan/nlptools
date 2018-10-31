@@ -70,7 +70,7 @@ class TFIDF(BagOfWords):
         """
             returns 
         """
-        return self.get_word_tf * self.get_word_idf
+        return self.get_word_tf(word,document_bag) * self.get_word_idf(word)
 
     def get_word_idf(self,word):
         """
