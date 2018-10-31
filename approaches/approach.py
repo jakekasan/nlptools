@@ -9,6 +9,7 @@ from nltk.corpus import wordnet as wn
 from nltk.stem import WordNetLemmatizer
 from nltk import pos_tag
 
+import re
 import unittest
 
 class Approach:
@@ -31,8 +32,9 @@ class Approach:
         """
             returns a list of tuples with POS
         """
-        tokens = word_tokenize(document)
+        #tokens = word_tokenize(document)
         #tokens = list(map(lambda x: x.lower(),tokens))
+        tokens = re.split(r"/([\W])*/g",document)
         tokens = [w.lower() for w in tokens]
         tokens_pos = pos_tag(tokens)
         tokens_pos = [(a,self.get_wordnet_tag(b)) for a,b in tokens_pos]
@@ -54,15 +56,8 @@ class Approach:
         """
             returns lemms for single document
         """
-        try:
-            return [self.lemmer.lemmatize(a,b) for a,b in tokens]
-        except:
-            print("Failed!")
+        return [self.lemmer.lemmatize(a,self.get_wordnet_tag(b)) for a,b in tokens]
 
-            print(tokens)
-
-        
-        
 
     def lemmatize_corpus(self,corpus):
         """
@@ -123,7 +118,10 @@ class Approach:
         ':':None # mid-sentence punc (: ; ... – -)
         }
 
-        if tag not in tag_map.keys():
+        if tag in [x for x in tag_map.values() if x is not None]:
+            return tag
+
+        if (type(tag) != str) or (tag not in tag_map.keys()):
             return wn.NOUN
             
         for key,value in tag_map.items():
@@ -156,10 +154,21 @@ class TestApproach(unittest.TestCase):
 
     def test_pos(self):
         string = "Hello world"
-        expected = [("hello","NN"),("world","NN")]
+        expected = [("hello",wn.NOUN),("world",wn.NOUN)]
         actual = self.app.tokenize_document(string,pos=True)
         self.assertEqual(expected,actual)
 
+    def test_wordnet_tagger_alreadytagged(self):
+        expected = wn.NOUN
+        self.assertEqual(expected,self.app.get_wordnet_tag(expected))
+
+    def test_wordnet_tagger_not_tagged_legit(self):
+        expected = wn.NOUN
+        self.assertEqual(expected,self.app.get_wordnet_tag("NN"))
+
+    def test_wordnet_tagger_not_tagged_nonlegit(self):
+        expected = wn.NOUN
+        self.assertEqual(expected,self.app.get_wordnet_tag("this is crap"))
 
 def main():
     unittest.main()
