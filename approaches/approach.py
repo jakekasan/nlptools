@@ -34,13 +34,14 @@ class Approach:
         """
         #tokens = word_tokenize(document)
         #tokens = list(map(lambda x: x.lower(),tokens))
-        tokens = re.split(r"/([\W])*/g",document)
-        tokens = [w.lower() for w in tokens]
+        tokens = re.split(r" |[\.\,\?\!\'\"\\\/\(\)\[\]]",document)
+        tokens = [w.lower() for w in tokens if w != ""]
+        if not pos:
+            return tokens
         tokens_pos = pos_tag(tokens)
         tokens_pos = [(a,self.get_wordnet_tag(b)) for a,b in tokens_pos]
-        if pos:
-            return tokens_pos
-        return tokens
+        return tokens_pos
+        
 
 
     def tokenize_corpus(self,corpus,pos=False):
@@ -56,7 +57,11 @@ class Approach:
         """
             returns lemms for single document
         """
-        return [self.lemmer.lemmatize(a,self.get_wordnet_tag(b)) for a,b in tokens]
+        try:
+            return [self.lemmer.lemmatize(a,self.get_wordnet_tag(b)) for a,b in tokens]
+        except:
+            print(tokens)
+            raise ValueError
 
 
     def lemmatize_corpus(self,corpus):
@@ -118,7 +123,7 @@ class Approach:
         ':':None # mid-sentence punc (: ; ... – -)
         }
 
-        if tag in [x for x in tag_map.values() if x is not None]:
+        if type(tag) == str and tag in [x for x in tag_map.values() if x is not None]:
             return tag
 
         if (type(tag) != str) or (tag not in tag_map.keys()):
