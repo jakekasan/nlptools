@@ -14,10 +14,12 @@ class TFIDF(BagOfWords):
         self.bags = None
         self.prototype = None
         self.documents = None
-        self.bags = None
         self.totalBag = None
         self.limit = None
         pass
+
+    def info(self):
+        print(self.__str__())
 
     def build(self,corpus=None):
         """
@@ -26,7 +28,12 @@ class TFIDF(BagOfWords):
             raw text into a numerical form.
         """
         documents = self.tokenize_corpus(corpus,pos=True)
+
+        print(documents)
+
         self.documents = self.lemmatize_corpus(documents)
+
+        print(self.documents)
 
         self.bags = [self.individual_bags(x) for x in self.documents]
 
@@ -48,7 +55,7 @@ class TFIDF(BagOfWords):
         self.totalBag = prototype
         self.prototype = sorted(prototype.keys())
 
-    def process_document(self,document):
+    def apply(self,document):
         """
             returns a list of td-idf values
         """
@@ -91,6 +98,8 @@ class TFIDF(BagOfWords):
             
         return word_count / all_words
         
+    def __str__(self):
+        return f"\nName: {self.name}\nBuild: {self.prototype is not None}\nArray Length: {len(self.prototype)}\n"
         
 
     
