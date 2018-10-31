@@ -17,13 +17,6 @@ class Approach:
         self.corpus = corpus
         self.lemmer = WordNetLemmatizer()
 
-    def buildApproach(self,df=None):
-        """
-            takes 
-        """
-        if df is None:
-            raise
-
     def process_document(self,document,pos=False):
         """
             once approach is built, this function can be used for getting inputs from raw text
@@ -61,8 +54,14 @@ class Approach:
         """
             returns lemms for single document
         """
+        try:
+            return [self.lemmer.lemmatize(a,b) for a,b in tokens]
+        except:
+            print("Failed!")
 
-        return [self.lemmer.lemmatize(a,b) for a,b in tokens]
+            print(tokens)
+
+        
         
 
     def lemmatize_corpus(self,corpus):
