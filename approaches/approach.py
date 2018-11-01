@@ -36,6 +36,10 @@ class Approach:
         #tokens = list(map(lambda x: x.lower(),tokens))
         tokens = re.split(r" |[\.\,\?\!\'\"\\\/\(\)\[\]]",document)
         tokens = [w.lower() for w in tokens if w != ""]
+
+        # filter out undesirable tokens (numbers, punctuation)
+        tokens = [w for w in tokens if re.search(r"[\,\<\>\"\=\!\@\$\%\^\&\*\(\)\+\<\>\?\_\`\;\:]|[1234567890]|[\-]{2,}",w) is None]
+
         if not pos:
             return tokens
         tokens_pos = pos_tag(tokens)
@@ -60,7 +64,6 @@ class Approach:
         try:
             return [self.lemmer.lemmatize(a,self.get_wordnet_tag(b)) for a,b in tokens]
         except:
-            print(tokens)
             raise ValueError
 
 
