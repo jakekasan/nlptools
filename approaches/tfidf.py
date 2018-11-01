@@ -8,14 +8,14 @@ from approaches.bow import BagOfWords
 import math
 
 class TFIDF(BagOfWords):
-    def __init__(self,name=None):
+    def __init__(self,name=None,limit=None):
         self.name = name or "Tf-Idf"
         BagOfWords.__init__(self,name=self.name)
         self.bags = None
         self.prototype = None
         self.documents = None
         self.totalBag = None
-        self.limit = None
+        self.limit = limit or None
         pass
 
     def info(self):
@@ -29,11 +29,7 @@ class TFIDF(BagOfWords):
         """
         documents = self.tokenize_corpus(corpus,pos=True)
 
-        print(documents)
-
         self.documents = self.lemmatize_corpus(documents)
-
-        print(self.documents)
 
         self.bags = [self.individual_bags(x) for x in self.documents]
 
@@ -45,7 +41,25 @@ class TFIDF(BagOfWords):
                 else:
                     prototype[word] = 1
 
+        n = len(self.bags)
+
+        filtered_prototype = {}
+        # remove words which appear in every document (thus guarenteeing a zero)
+        for key in prototype.keys():
+            if prototype[key] < n:
+                filtered_prototype[key] = prototype[key]
+
+        # def idf_not_zero(item):
+        #     for bag in self.bags:
+        #         if item[0] not in bag.keys():
+        #             return True
+        #     return False
+
+        prototype = filtered_prototype
+
         prototype = [x for x in sorted(prototype.items(),key=lambda x: x[1])]
+
+        # now filter out words with an idf of 0...
 
         if self.limit is not None:
             prototype = prototype[:self.limit]
