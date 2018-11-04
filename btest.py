@@ -2,8 +2,10 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.model_selection import cross_validate
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier
 
-df = pd.read_csv("./movie_reviews.csv")
+df = pd.read_csv("./rbs_processed.csv")
 
 count = 0
 
@@ -16,9 +18,11 @@ vals = df.drop("labels",axis=1)
 
 x_train, x_test, y_train, y_test = train_test_split(vals,df["labels"],test_size=0.4)
 
-knn = KNeighborsClassifier(n_neighbors=10)
+#knn = KNeighborsClassifier(n_neighbors=5)
+#dt = DecisionTreeClassifier(criterion="gini")
+rf = RandomForestClassifier()
 
-cv_results = cross_validate(knn,x_train,y_train,cv=10)
+cv_results = cross_validate(rf,x_train,y_train,cv=10)
 
 print(cv_results)
 
